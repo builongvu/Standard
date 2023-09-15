@@ -1,72 +1,91 @@
 package com.standard.controller;
 
-import com.standard.dto.ApiResponse;
-import com.standard.dto.AuthorRequest;
-import com.standard.entity.Author;
+import com.standard.dto.mapper.AuthorMapper;
+import com.standard.dto.response.ApiResponse;
+import com.standard.dto.request.AuthorRequest;
+import com.standard.dto.response.AuthorResponse;
+import com.standard.repository.AuthorRepository;
 import com.standard.service.AuthorService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/author")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final AuthorRepository authorRepository;
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAll() {
-        List<Author> authors = authorService.getAll();
+        List<AuthorResponse> authorResponses = AuthorMapper.INSTANCE.toResponses(authorService.getAll());
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(authors)
+                .data(authorResponses)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Integer id) {
-        Author author = authorService.getById(id);
+    public ResponseEntity<ApiResponse> getById(@PathVariable Long id) {
+        AuthorResponse authorResponse = AuthorMapper.INSTANCE.toResponse(authorService.getById(id));
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(author)
+                .data(authorResponse)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse> create(@RequestBody @Valid AuthorRequest authorRequest) {
-        Author savedAuthor = authorService.create(authorRequest);
+        AuthorResponse savedAuthorResponse = AuthorMapper.INSTANCE.toResponse(authorService.create(authorRequest));
         ApiResponse apiResponse = ApiResponse.builder()
-                .status(HttpStatus.OK.value())
-                .data(savedAuthor)
+                .status(HttpStatus.CREATED.value())
+                .data(savedAuthorResponse)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @PatchMapping
-    public ResponseEntity<ApiResponse> update(@RequestBody AuthorRequest authorRequest) {
-        Author updatedAuthor = authorService.update(authorRequest);
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse> update(@PathVariable long id, @RequestBody AuthorRequest authorRequest) {
+        AuthorResponse updatedAuthorResponse = AuthorMapper.INSTANCE.toResponse(authorService.update(id, authorRequest));
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(updatedAuthor)
+                .data(updatedAuthorResponse)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> delete(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         authorService.delete(id);
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message(HttpStatus.OK.name())
                 .build();
         return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/excel/export")
+    public void export(HttpServletResponse response) throws IOException {
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=author.xlsx");
+        authorService.exportExcel(response);
+    }
+
+    @GetMapping("/custom")
+    public List<AuthorResponse> getAllAuthor() throws InstantiationException, IllegalAccessException {
+        return authorService.getAllCustom();
     }
 
 }

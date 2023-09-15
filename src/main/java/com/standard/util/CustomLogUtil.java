@@ -42,7 +42,7 @@ public class CustomLogUtil {
 
     public static String writeValueAsString(ObjectMapper objectMapper, Object object) {
         try {
-            return objectMapper.writeValueAsString(object);
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

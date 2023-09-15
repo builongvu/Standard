@@ -1,27 +1,20 @@
 package com.standard.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.*;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "book")
-public class Book {
+public class Book extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     private String name;
     private Date publicationDate;
     private Integer authorId;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 
 }

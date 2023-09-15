@@ -1,20 +1,25 @@
 package com.standard.service.impl;
 
 import com.standard.constant.ErrorEnum;
-import com.standard.dto.AuthorRequest;
+import com.standard.dto.request.AuthorRequest;
+import com.standard.dto.response.AuthorResponse;
 import com.standard.entity.Author;
 import com.standard.exception.ApplicationException;
-import com.standard.mapper.AuthorMapper;
+import com.standard.dto.mapper.AuthorMapper;
 import com.standard.repository.AuthorRepository;
 import com.standard.service.AuthorService;
-import lombok.AllArgsConstructor;
+import com.standard.util.ExcelUtil;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
@@ -25,26 +30,46 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getById(Integer id) {
+    public Author getById(Long id) {
         Optional<Author> optionalAuthor = authorRepository.findById(id);
-        return optionalAuthor.orElseThrow(() -> new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "id", id.toString()));
+        return optionalAuthor.orElseThrow(() ->
+                        new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Author", "id", id));
     }
 
     @Override
     public Author create(AuthorRequest authorRequest) {
         Author author = AuthorMapper.INSTANCE.toEntity(authorRequest);
-        return authorRepository.saveAndFlush(author);
+        return authorRepository.save(author);
     }
 
     @Override
-    public Author update(AuthorRequest authorRequest) {
-        return create(authorRequest);
+    public Author update(long id, AuthorRequest authorRequest) {
+        Author author = AuthorMapper.INSTANCE.toEntity(authorRequest);
+        author.setId(id);
+        return authorRepository.save(author);
     }
 
     @Override
-    public void delete(Integer id) {
-        authorRepository.delete(authorRepository.findById(id)
-                .orElseThrow(() -> new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "id", id.toString())));
+    public void delete(Long id) {
+        Author author = getById(id);
+        authorRepository.delete(author);
+    }
+
+    @Override
+    public List<AuthorResponse> getAllCustom() {
+        return authorRepository.findAllCustom();
+    }
+
+    @Override
+    public void exportExcel(HttpServletResponse response) throws IOException {
+        String[] headersList = {"ID", "NAME", "DATE OF BIRTH", "DESCRIPTION"};
+        List<Object[]> listDataAuthor = new ArrayList<>();
+//        List<Author> authors = getAll();
+//        for (Author author : authors) {
+//            Object[] data = new Author[]{author};
+//            System.out.println(Arrays.toString(data));
+//        }
+//        ExcelUtil.export(response, headersList, authors);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.standard.dto;
+package com.standard.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -14,11 +14,10 @@ import java.sql.Date;
 @AllArgsConstructor
 public class AuthorRequest {
 
-    private Integer id;
-    private String name;
-    private Date dateOfBirth;
+    String name;
+    Date dateOfBirth;
     @NotBlank(message = "hometown can not be blank")
-    private String homeTown;
-    private String description;
+    String hometown;
+    String description;
 
 }

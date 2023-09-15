@@ -1,30 +1,23 @@
 package com.standard.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Entity
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "author")
-public class Author {
+public class Author extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     private String name;
     private Date dateOfBirth;
-    private String homeTown;
+    private String hometown;
     private String description;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
 
 }

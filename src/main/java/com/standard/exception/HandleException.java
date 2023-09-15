@@ -2,7 +2,7 @@ package com.standard.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.standard.dto.ApiResponse;
+import com.standard.dto.response.ApiResponse;
 import com.standard.util.CustomLogUtil;
 import com.standard.util.LogInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,20 +21,26 @@ public class HandleException {
 
     private final ObjectMapper objectMapper;
 
-    @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<ApiResponse> handleApplicationException(ApplicationException ex, HttpServletRequest request) throws JsonProcessingException {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse> handleException(Exception ex, HttpServletRequest request) {
         ApiResponse apiResponse = ApiResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(ex.getMessage())
                 .build();
         log.error(CustomLogUtil.writeValueAsString(objectMapper,
-                new LogInfo(null, null, LogLevel.ERROR, request, apiResponse)));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                new LogInfo(null, null, LogLevel.ERROR, request, apiResponse, ex)), ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
     }
 
-    @ExceptionHandler(ArithmeticException.class)
-    public void abc(ArithmeticException ex) {
-        System.out.println(ex.getMessage());
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<ApiResponse> handleApplicationException(ApplicationException ex, HttpServletRequest request) throws JsonProcessingException {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .status(ex.getStatus())
+                .message(ex.getMessage())
+                .build();
+        log.error(CustomLogUtil.writeValueAsString(objectMapper,
+                new LogInfo(null, null, LogLevel.ERROR, request, apiResponse, ex)));
+        return ResponseEntity.status(ex.getStatus()).body(apiResponse);
     }
 
 }
