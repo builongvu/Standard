@@ -1,7 +1,9 @@
 package com.standard.service;
 
 import com.standard.dto.request.AuthorRequest;
+import com.standard.dto.request.AuthorSearchRequest;
 import com.standard.dto.response.AuthorResponse;
+import com.standard.dto.response.AuthorSearchResponse;
 import com.standard.entity.Author;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -20,7 +22,7 @@ public interface AuthorService {
 
     void delete(Long id);
 
-    List<AuthorResponse> getAllCustom();
+    AuthorSearchResponse search(AuthorSearchRequest authorSearchRequest);
 
     void exportExcel(HttpServletResponse response) throws IOException;
 

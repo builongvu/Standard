@@ -28,7 +28,7 @@ public class AddressServiceImpl implements AddressService {
     public Address getById(Long id) {
         Optional<Address> address = addressRepository.findById(id);
         return address.orElseThrow(() ->
-                        new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Address", "id", id));
+                        new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Address", "id", id.toString()));
     }
 
     @Override

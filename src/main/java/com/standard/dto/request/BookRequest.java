@@ -1,7 +1,5 @@
 package com.standard.dto.request;
 
-import com.standard.dto.BaseDto;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,12 +11,10 @@ import java.sql.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorRequest {
+public class BookRequest {
 
     String name;
-    Date dateOfBirth;
-    @NotBlank(message = "hometown can not be blank")
-    String hometown;
-    String description;
+    Date publicationDate;
+    Long authorId;
 
 }

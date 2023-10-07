@@ -1,5 +1,6 @@
 package com.standard.service.impl;
 
+import com.standard.aop.TimeMonitor;
 import com.standard.constant.ErrorEnum;
 import com.standard.dto.request.UnitRequest;
 import com.standard.entity.Employee;
@@ -11,6 +12,7 @@ import com.standard.service.EmployeeService;
 import com.standard.service.UnitService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public Unit getById(Long id) {
         Optional<Unit> optionalUnit = unitRepository.findById(id);
-        return optionalUnit.orElseThrow(() -> new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Unit", "id", id));
+        return optionalUnit.orElseThrow(() -> new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Unit", "id", id.toString()));
     }
 
     @Override

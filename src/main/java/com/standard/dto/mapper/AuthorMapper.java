@@ -5,6 +5,7 @@ import com.standard.dto.response.AuthorResponse;
 import com.standard.entity.Author;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 

@@ -12,6 +12,7 @@ import com.standard.service.AddressService;
 import com.standard.service.EmployeeService;
 import com.standard.service.SkillService;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getById(Long id) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        return optionalEmployee.orElseThrow(() -> new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Employee", "id", id));
+        return optionalEmployee.orElseThrow(() -> new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Employee", "id", id.toString()));
     }
 
     @Transactional

@@ -1,10 +1,12 @@
 package com.standard.controller;
 
-import com.standard.dto.mapper.SkillMapper;
-import com.standard.dto.request.SkillRequest;
+import com.standard.dto.mapper.BookMapper;
+import com.standard.dto.request.BookRequest;
+import com.standard.dto.request.BookSearchRequest;
 import com.standard.dto.response.ApiResponse;
-import com.standard.dto.response.SkillResponse;
-import com.standard.service.SkillService;
+import com.standard.dto.response.BookResponse;
+import com.standard.dto.response.BookSearchResponse;
+import com.standard.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,58 +16,68 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/skill")
+@RequestMapping("/book")
 @RequiredArgsConstructor
-public class SkillController {
+public class BookController {
 
-    private final SkillService skillService;
+    private final BookService bookService;
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAll() {
-        List<SkillResponse> skillResponses = SkillMapper.INSTANCE.toResponses(skillService.getAll());
+        List<BookResponse> bookResponses = BookMapper.INSTANCE.toResponses(bookService.getAll());
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(skillResponses)
+                .data(bookResponses)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getById(@PathVariable long id) {
-        SkillResponse skillResponse = SkillMapper.INSTANCE.toResponse(skillService.getById(id));
+        BookResponse bookResponse = BookMapper.INSTANCE.toResponse(bookService.getById(id));
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(skillResponse)
+                .data(bookResponse)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> create(@RequestBody @Valid SkillRequest skillRequest) {
-        SkillResponse skillResponse = SkillMapper.INSTANCE.toResponse(skillService.create(skillRequest));
+    public ResponseEntity<ApiResponse> create(@RequestBody @Valid BookRequest bookRequest) {
+        BookResponse bookResponse = BookMapper.INSTANCE.toResponse(bookService.create(bookRequest));
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.CREATED.value())
-                .data(skillResponse)
+                .data(bookResponse)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> update(@PathVariable long id, @RequestBody @Valid SkillRequest skillRequest) {
-        SkillResponse skillResponse = SkillMapper.INSTANCE.toResponse(skillService.update(id, skillRequest));
+    public ResponseEntity<ApiResponse> update(@PathVariable long id, @RequestBody @Valid BookRequest bookRequest) {
+        BookResponse bookResponse = BookMapper.INSTANCE.toResponse(bookService.update(id, bookRequest));
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(skillResponse)
+                .data(bookResponse)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable long id) {
-        skillService.delete(id);
+        bookService.delete(id);
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(HttpStatus.OK.value())
                 .data(HttpStatus.OK.name())
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<ApiResponse> search(@RequestBody BookSearchRequest bookSearchRequest) {
+        BookSearchResponse bookSearchResponse = bookService.search(bookSearchRequest);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .status(HttpStatus.OK.value())
+                .data(bookSearchResponse)
                 .build();
         return ResponseEntity.ok(apiResponse);
     }

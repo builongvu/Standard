@@ -50,7 +50,7 @@ public class AddressController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> update(@PathVariable long id, @RequestBody @Valid AddressRequest addressRequest) {
         AddressResponse updatedAddressResponse = AddressMapper.INSTANCE.toResponse(addressService.update(id, addressRequest));
         ApiResponse apiResponse = ApiResponse.builder()

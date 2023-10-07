@@ -1,10 +1,7 @@
 package com.standard.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.standard.entity.Address;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import lombok.*;
 
 import java.sql.Date;
@@ -21,6 +18,7 @@ public class EmployeeResponse {
     long id;
     String name;
     Boolean gender;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "UTC")
     Date dateOfBirth;
     AddressResponse address;
     List<SkillResponse> skills;

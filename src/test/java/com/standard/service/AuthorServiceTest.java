@@ -1,6 +1,5 @@
 package com.standard.service;
 
-import com.standard.dto.response.AuthorResponse;
 import com.standard.entity.Author;
 import com.standard.exception.ApplicationException;
 import com.standard.dto.mapper.AuthorMapper;
@@ -69,7 +68,7 @@ public class AuthorServiceTest {
         Author mockAuthor = Author.builder().build();
         when(authorRepository.save(mockAuthor)).thenReturn(mockAuthor);
 
-        Author actualAuthor = authorService.create(AuthorMapper.INSTANCE.toRequestDto(mockAuthor));
+        Author actualAuthor = authorService.create(AuthorMapper.INSTANCE.toRequest(mockAuthor));
 
         assertEquals(mockAuthor.getId(), actualAuthor.getId());
 
@@ -81,7 +80,7 @@ public class AuthorServiceTest {
         Author mockAuthor = Author.builder().build();
         when(authorRepository.save(mockAuthor)).thenReturn(mockAuthor);
 
-        Author actualAuthor = authorService.update(mockAuthor.getId(), AuthorMapper.INSTANCE.toRequestDto(mockAuthor));
+        Author actualAuthor = authorService.update(mockAuthor.getId(), AuthorMapper.INSTANCE.toRequest(mockAuthor));
 
         assertEquals(mockAuthor.getId(), actualAuthor.getId());
 

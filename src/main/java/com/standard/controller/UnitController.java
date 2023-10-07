@@ -7,7 +7,6 @@ import com.standard.dto.response.UnitResponse;
 import com.standard.service.UnitService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +50,7 @@ public class UnitController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> update(@PathVariable long id, @RequestBody @Valid UnitRequest unitRequest) {
         UnitResponse updatedUnitResponse = UnitMapper.INSTANCE.toResponse(unitService.update(id, unitRequest));
         ApiResponse apiResponse = ApiResponse.builder()

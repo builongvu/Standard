@@ -26,7 +26,7 @@ public class Employee extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
-    @JsonBackReference
+//    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Unit unit;
     @ManyToMany

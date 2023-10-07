@@ -1,14 +1,16 @@
 package com.standard.controller;
 
 import com.standard.dto.mapper.AuthorMapper;
+import com.standard.dto.request.AuthorSearchRequest;
 import com.standard.dto.response.ApiResponse;
 import com.standard.dto.request.AuthorRequest;
 import com.standard.dto.response.AuthorResponse;
-import com.standard.repository.AuthorRepository;
+import com.standard.dto.response.AuthorSearchResponse;
 import com.standard.service.AuthorService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +26,6 @@ import java.util.List;
 public class AuthorController {
 
     private final AuthorService authorService;
-    private final AuthorRepository authorRepository;
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAll() {
@@ -56,7 +57,7 @@ public class AuthorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> update(@PathVariable long id, @RequestBody AuthorRequest authorRequest) {
         AuthorResponse updatedAuthorResponse = AuthorMapper.INSTANCE.toResponse(authorService.update(id, authorRequest));
         ApiResponse apiResponse = ApiResponse.builder()
@@ -76,16 +77,21 @@ public class AuthorController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<ApiResponse> search(@RequestBody AuthorSearchRequest authorSearchRequest) {
+        AuthorSearchResponse authorSearchResponse = authorService.search(authorSearchRequest);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .status(HttpStatus.OK.value())
+                .data(authorSearchResponse)
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @GetMapping("/excel/export")
     public void export(HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=author.xlsx");
         authorService.exportExcel(response);
-    }
-
-    @GetMapping("/custom")
-    public List<AuthorResponse> getAllAuthor() throws InstantiationException, IllegalAccessException {
-        return authorService.getAllCustom();
     }
 
 }

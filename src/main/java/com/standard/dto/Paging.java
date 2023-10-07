@@ -1,9 +1,7 @@
-package com.standard.dto.response;
+package com.standard.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-
-import java.sql.Date;
 
 @Getter
 @Setter
@@ -11,11 +9,10 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookResponse {
+public class Paging {
 
-    long id;
-    String name;
-    Date publicationDate;
-    long authorId;
+    int page;
+    int pageSize;
+    int totalElement;
 
 }

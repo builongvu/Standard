@@ -1,16 +1,22 @@
 package com.standard.service.impl;
 
 import com.standard.constant.ErrorEnum;
+import com.standard.dto.Paging;
 import com.standard.dto.request.AuthorRequest;
+import com.standard.dto.request.AuthorSearchRequest;
 import com.standard.dto.response.AuthorResponse;
+import com.standard.dto.response.AuthorSearchResponse;
 import com.standard.entity.Author;
 import com.standard.exception.ApplicationException;
 import com.standard.dto.mapper.AuthorMapper;
 import com.standard.repository.AuthorRepository;
 import com.standard.service.AuthorService;
-import com.standard.util.ExcelUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,7 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
     public Author getById(Long id) {
         Optional<Author> optionalAuthor = authorRepository.findById(id);
         return optionalAuthor.orElseThrow(() ->
-                        new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Author", "id", id));
+                        new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Author", "id", id.toString()));
     }
 
     @Override
@@ -56,8 +62,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<AuthorResponse> getAllCustom() {
-        return authorRepository.findAllCustom();
+    public AuthorSearchResponse search(AuthorSearchRequest authorSearchRequest) {
+        return authorRepository.search(authorSearchRequest);
     }
 
     @Override

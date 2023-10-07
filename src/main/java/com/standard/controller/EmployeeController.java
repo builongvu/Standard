@@ -50,7 +50,7 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> update(@PathVariable long id, @RequestBody @Valid EmployeeRequest employeeRequest) {
         EmployeeResponse updatedEmployeeResponse = EmployeeMapper.INSTANCE.toResponse(employeeService.update(id, employeeRequest));
         ApiResponse apiResponse = ApiResponse.builder()

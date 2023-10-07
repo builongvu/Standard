@@ -1,21 +1,20 @@
 package com.standard.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.standard.dto.BaseDto;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.sql.Date;
+import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BookResponse {
+public class AuthorSearchResponse extends BaseDto {
 
-    long id;
-    String name;
-    Date publicationDate;
-    long authorId;
+    List<AuthorResponse> content;
 
 }

@@ -27,7 +27,8 @@ public class SkillServiceImpl implements SkillService {
     @Override
     public Skill getById(long id) {
         Optional<Skill> optionalSkill = skillRepository.findById(id);
-        return optionalSkill.orElseThrow(() -> new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Skill", "id", id));
+        return optionalSkill.orElseThrow(() ->
+                new ApplicationException(ErrorEnum.RESOURCE_NOT_FOUND, "Skill", "id", String.valueOf(id)));
     }
 
     @Override
