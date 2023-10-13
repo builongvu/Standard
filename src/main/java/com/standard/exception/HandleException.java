@@ -38,12 +38,12 @@ public class HandleException {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
         ApiResponse apiResponse = ApiResponse.builder()
-                .status(HttpStatus.UNAUTHORIZED.value())
+                .status(ErrorEnum.UNAUTHORIZED.getStatus())
                 .message(ex.getMessage())
                 .build();
         log.error(CustomLogUtil.writeValueAsString(objectMapper,
                 new LogInfo(null, null, LogLevel.ERROR, request, apiResponse, ex)), ex);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+        return ResponseEntity.status(ErrorEnum.UNAUTHORIZED.getStatus()).body(apiResponse);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
